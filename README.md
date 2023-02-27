@@ -1,12 +1,12 @@
 # The Trade-off between Universality and Label Efficiency of Representations from Contrastive Learning
 
-This repository contains the Pytorch implementation of our method in the paper 
+This repository is the official Pytorch implementation of our method in the paper 
 ```
 The Trade-off between Universality and Label Efficiency of Representations from Contrastive Learning
 Zhenmei Shi*, Jiefeng Chen*, Kunyang Li, Jayaram Raghuram, Xi Wu, Yingyu Liang, Somesh Jha
 ```
 
-This paper is published as an Spotlight at ICLR 2023. 
+This paper is published as an Spotlight at ICLR 2023 ([OpenReview link](https://openreview.net/forum?id=rvsbw2YthH_)). 
 
 ## Requirements
 
