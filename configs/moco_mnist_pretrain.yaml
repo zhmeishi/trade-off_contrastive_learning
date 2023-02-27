@@ -1,0 +1,60 @@
+name: moco-mnist-experiment-resnet18
+dataset: 
+  name: mnist
+  image_size: 28
+  max_dataset_size: -1
+  num_imagenet_classes: 1000
+  imagenet_size: 50000
+  num_workers: 8
+
+model: 
+  name: moco
+  mean_std_name: mnist
+  backbone: resnet18_variant1
+  moco_dim: 512 # feature dimension
+  moco_k: 4096 # queue size; number of negative keys
+  moco_m: 0.99 # moco momentum of updating key encoder
+  moco_t: 0.1 # softmax temperature
+  bn_splits: 1 # simulate multi-gpu behavior of BatchNorm in one gpu; 1 is SyncBatchNorm in multi-gpu
+
+train:
+  optimizer: 
+    name: sgd
+    weight_decay: 0.0005
+    momentum: 0.9
+  warmup_epochs: 0
+  warmup_lr: 0
+  base_lr: 0.06
+  final_lr: 0
+  num_epochs: 800 # this parameter influence the lr decay
+  stop_at_epoch: 800 # has to be smaller than num_epochs
+  batch_size: 512
+  knn_monitor: False # knn monitor will take more time
+  knn_interval: 1
+  knn_k: 200
+  early_stop: False
+  patience_epochs: 100
+eval: # linear evaluation, False will turn off automatic evaluation after training
+  optimizer: 
+    name: sgd
+    weight_decay: 0
+    momentum: 0.9
+  warmup_lr: 0
+  warmup_epochs: 0
+  base_lr: 5
+  final_lr: 0
+  batch_size: 256
+  num_epochs: 100
+
+logger:
+  tensorboard: False
+  matplotlib: True
+
+# two things might lead to stochastic behavior other than seed:
+# worker_init_fn from dataloader and torch.nn.functional.interpolate 
+# (keep this in mind if you want to achieve 100% deterministic)
+
+
+
+
+

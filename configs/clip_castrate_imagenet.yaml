@@ -1,0 +1,38 @@
+name: clip_castrate-imagenet-experiment
+dataset: 
+  name: imagenet
+  image_size: 224
+  max_dataset_size: -1
+  num_imagenet_classes: 1000
+  imagenet_size: -1
+  num_workers: 8
+
+model: # https://github.com/openai/CLIP/blob/main/clip/clip.py
+  name: clip_castrate:ViT-L/14 # RN50, RN101, RN50x4, RN50x16, RN50x64, ViT-B/32, ViT-B/16, ViT-L/14, ViT-L/14@336px
+  mean_std_name: clip
+
+train: null
+
+eval: # linear evaluation, False will turn off automatic evaluation after training
+  optimizer: 
+    name: sgd
+    weight_decay: 0
+    momentum: 0.9
+  warmup_lr: 0
+  warmup_epochs: 0
+  base_lr: 5
+  final_lr: 0
+  batch_size: 256
+  num_epochs: 200
+
+logger:
+  tensorboard: False
+  matplotlib: False
+
+# two things might lead to stochastic behavior other than seed:
+# worker_init_fn from dataloader and torch.nn.functional.interpolate 
+# (keep this in mind if you want to achieve 100% deterministic)
+
+
+
+

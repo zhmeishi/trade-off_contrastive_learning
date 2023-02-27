@@ -1,0 +1,40 @@
+name: nnclr-cifar10-experiment-resnet18_cifar_variant1
+dataset: 
+  name: cifar10
+  image_size: 32
+  max_dataset_size: -1
+  num_imagenet_classes: 1000
+  imagenet_size: 500000
+  num_workers: 4
+
+model: 
+  name: nnclr
+  mean_std_name: cifar10
+  backbone: resnet18_variant1
+  proj_layers: 2
+
+train: null
+
+eval: # linear evaluation, False will turn off automatic evaluation after training
+  optimizer: 
+    name: sgd
+    weight_decay: 0
+    momentum: 0.9
+  warmup_lr: 0
+  warmup_epochs: 0
+  base_lr: 5
+  final_lr: 0
+  batch_size: 256
+  num_epochs: 200
+
+logger:
+  tensorboard: False
+  matplotlib: False
+
+# two things might lead to stochastic behavior other than seed:
+# worker_init_fn from dataloader and torch.nn.functional.interpolate 
+# (keep this in mind if you want to achieve 100% deterministic)
+
+
+
+
