@@ -65,3 +65,16 @@ First, save train, test and augmentation features (Please download the imagenet 
 #### Finetune + Contrastive Regularization for CLIP
 
 `python finetune_contrastive_eval.py --config-file ./configs/clip_castrate:ViT-L-14_imagenet_feature_simclr_mlp_eval_sgd.yaml --data_dir ./data/ --log_dir ./logs/ --ckpt_dir checkpoints/ --percent 1.0 --hide_progress`
+
+## Citation 
+Please cite our work if you use the codebase: 
+```
+@inproceedings{
+shi2023the,
+title={The Trade-off between Universality and Label Efficiency of Representations from Contrastive Learning},
+author={Zhenmei Shi and Jiefeng Chen and Kunyang Li and Jayaram Raghuram and Xi Wu and Yingyu Liang and Somesh Jha},
+booktitle={International Conference on Learning Representations},
+year={2023},
+url={https://openreview.net/forum?id=rvsbw2YthH_}
+}
+```
