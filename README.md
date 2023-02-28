@@ -78,3 +78,6 @@ year={2023},
 url={https://openreview.net/forum?id=rvsbw2YthH_}
 }
 ```
+
+## License
+Please refer to the [LICENSE](LICENSE).
