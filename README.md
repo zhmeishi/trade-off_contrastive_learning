@@ -1,12 +1,14 @@
 # The Trade-off between Universality and Label Efficiency of Representations from Contrastive Learning
 
-This repository is the official Pytorch implementation of our method in the paper 
+This repository is the official Pytorch implementation of our method in the paper
+
 ```
 The Trade-off between Universality and Label Efficiency of Representations from Contrastive Learning
+
 Zhenmei Shi*, Jiefeng Chen*, Kunyang Li, Jayaram Raghuram, Xi Wu, Yingyu Liang, Somesh Jha
 ```
 
-This paper is published as an Spotlight at ICLR 2023 ([OpenReview link](https://openreview.net/forum?id=rvsbw2YthH_)). 
+This paper is published as a Spotlight at ICLR 2023 ([OpenReview link](https://openreview.net/forum?id=rvsbw2YthH_)).
 
 ## Requirements
 
@@ -16,58 +18,88 @@ Pytorch >= 1.12.1 (guide is [here](https://pytorch.org/get-started/locally/))
 
 Install other used packages:
 
-`pip install -r requirements.txt`
+```
+pip install -r requirements.txt
 
-`pip install git+https://github.com/openai/CLIP.git`
+pip install git+https://github.com/openai/CLIP.git
+```
 
+## Prepare Datasets
+
+Download some datasets under your datasets folder `/my/data/folder` following the link below:
+
+[ImageNet](https://github.com/pytorch/examples/blob/main/imagenet/extract_ILSVRC.sh), [ImageNet32](https://patrykchrabaszcz.github.io/Imagenet32/), [GTSRB](https://drive.google.com/file/d/1f37CPYd9YYMHuRk6JM7Oy-nFqUvZLFR2/view?usp=sharing), [Fer2013](https://drive.google.com/drive/folders/1f0YDhph4amlXtDRdiMpDLn07ni0SI6Aj?usp=sharing), [FaceScrub](https://drive.google.com/drive/folders/1f0YDhph4amlXtDRdiMpDLn07ni0SI6Aj?usp=sharing)
+
+Other datasets will be downloaded automatically by setting `download=True`.
 
 ## Run Experiments
-You may modify the config file to run your own experiments. Here we give some examples. 
+
+You may modify the config file to run your own experiments. Here we give some examples.
 
 ### Training
 
-An example to train a MoCo v2 model. Just need to change the config file `moco_cifar_pretrain.yaml`.
+Here is an example of training a MoCo v2 model. You just need to change the config file `moco_cifar_pretrain.yaml`.
 
-`python main.py --data_dir ./data/ --log_dir ./logs/ --config-file ./configs/moco_cifar_pretrain.yaml --ckpt_dir ./checkpoints/ --download --hide_progress --save_interval 10`
+```
+python main.py --data_dir /my/data/folder --log_dir ./logs/ --config-file ./configs/moco_cifar_pretrain.yaml --ckpt_dir ./checkpoints/ --download --hide_progress --save_interval 10
+```
 
 An example to continue training from a checkpoint.
 
-`python main.py --data_dir ./data/ --log_dir ./logs/ --config-file ./configs/moco_cifar_pretrain.yaml --ckpt_dir ./checkpoints/ --download --hide_progress --save_interval 10 --start_epoch {number} --save_dir checkpoints/{ckp_dir}`
+```
+python main.py --data_dir /my/data/folder --log_dir ./logs/ --config-file ./configs/moco_cifar_pretrain.yaml --ckpt_dir ./checkpoints/ --download --hide_progress --save_interval 10 --start_epoch {number} --save_dir checkpoints/{ckp_dir}
+```
 
 ### Evaluation
 
 #### Linear Probing
 
-`python linear_eval.py --config-file ./configs/moco_cifar_eval_sgd.yaml --data_dir ./data/ --log_dir ./logs/ --ckpt_dir checkpoints/ --eval_from ./checkpoints/{model_ckpt} --percent 1.0 --hide_progress`
+```
+python linear_eval.py --config-file ./configs/moco_cifar_eval_sgd.yaml --data_dir /my/data/folder --log_dir ./logs/ --ckpt_dir checkpoints/ --eval_from ./checkpoints/{model_ckpt} --percent 1.0 --hide_progress
+```
 
 #### Finetune
 
-`python finetune_eval.py --config-file ./configs/moco_cifar_finetune_contrastive_eval.yaml --data_dir ./data/ --log_dir ./logs/ --ckpt_dir checkpoints/ --eval_from ./checkpoints/{model_ckpt} --percent 1.0 --hide_progress`
+```
+python finetune_eval.py --config-file ./configs/moco_cifar_finetune_contrastive_eval.yaml --data_dir /my/data/folder --log_dir ./logs/ --ckpt_dir checkpoints/ --eval_from ./checkpoints/{model_ckpt} --percent 1.0 --hide_progress
+```
 
 #### Finetune + Contrastive Regularization
 
-`python finetune_contrastive_eval.py --config-file ./configs/moco_cifar_finetune_contrastive_eval.yaml --data_dir ./data/ --log_dir ./logs/ --ckpt_dir checkpoints/ --eval_from ./checkpoints/{model_ckpt} --percent 1.0 --hide_progress`
+```
+python finetune_contrastive_eval.py --config-file ./configs/moco_cifar_finetune_contrastive_eval.yaml --data_dir /my/data/folder --log_dir ./logs/ --ckpt_dir checkpoints/ --eval_from ./checkpoints/{model_ckpt} --percent 1.0 --hide_progress
+```
 
 ### CLIP
 
-First, save train, test and augmentation features (Please download the imagenet to the folder `./data/imagenet/`):
+First, save train, test, and augmentation features (Please download the ImageNet to the folder `/my/data/folder/imagenet/`):
 
-`python get_model_feature.py --config-file ./configs/clip_castrate_imagenet.yaml --data_dir ./data/ --log_dir ./logs/ --ckpt_dir checkpoints/ --hide_progress --start_epoch 0 --end_epoch 5`
+```
+python get_model_feature.py --config-file ./configs/clip_castrate_imagenet.yaml --data_dir /my/data/folder --log_dir ./logs/ --ckpt_dir checkpoints/ --hide_progress --start_epoch 0 --end_epoch 5
+```
 
 #### Linear Probing for CLIP
 
-`python linear_eval.py --config-file ./configs/clip_castrate:ViT-L-14_imagenet_feature_eval_sgd.yaml --data_dir ./data/ --log_dir ./logs/ --ckpt_dir checkpoints/ --percent 1.0 --hide_progress`
+```
+python linear_eval.py --config-file ./configs/clip_castrate:ViT-L-14_imagenet_feature_eval_sgd.yaml --data_dir /my/data/folder --log_dir ./logs/ --ckpt_dir checkpoints/ --percent 1.0 --hide_progress
+```
 
 #### Finetune for CLIP
 
-`python finetune_eval.py --config-file ./configs/clip_castrate:ViT-L-14_imagenet_feature_simclr_mlp_eval_sgd.yaml --data_dir ./data/ --log_dir ./logs/ --ckpt_dir checkpoints/ --percent 1.0 --hide_progress`
+```
+python finetune_eval.py --config-file ./configs/clip_castrate:ViT-L-14_imagenet_feature_simclr_mlp_eval_sgd.yaml --data_dir /my/data/folder --log_dir ./logs/ --ckpt_dir checkpoints/ --percent 1.0 --hide_progress
+```
 
 #### Finetune + Contrastive Regularization for CLIP
 
-`python finetune_contrastive_eval.py --config-file ./configs/clip_castrate:ViT-L-14_imagenet_feature_simclr_mlp_eval_sgd.yaml --data_dir ./data/ --log_dir ./logs/ --ckpt_dir checkpoints/ --percent 1.0 --hide_progress`
+```
+python finetune_contrastive_eval.py --config-file ./configs/clip_castrate:ViT-L-14_imagenet_feature_simclr_mlp_eval_sgd.yaml --data_dir /my/data/folder --log_dir ./logs/ --ckpt_dir checkpoints/ --percent 1.0 --hide_progress
+```
 
-## Citation 
-Please cite our work if you use the codebase: 
+## Citation
+
+Please cite our work if you use the codebase:
+
 ```
 @inproceedings{
 shi2023the,
@@ -80,4 +112,5 @@ url={https://openreview.net/forum?id=rvsbw2YthH_}
 ```
 
 ## License
+
 Please refer to the [LICENSE](LICENSE).
